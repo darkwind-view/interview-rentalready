@@ -16,7 +16,7 @@ build_ci_image:
       - docker build --tag $REPOSITORY_OF_PIPELINE_IMAGES:$CI_BUILDER_IMAGE ci
       - docker push $REPOSITORY_OF_PIPELINE_IMAGES:$CI_BUILDER_IMAGE
 
-build_ci_image:
+build_app_image:
   image: $REPOSITORY_OF_PIPELINE_IMAGES:$CI_BUILDER_IMAGE
   stage: build_app_image
   script:
