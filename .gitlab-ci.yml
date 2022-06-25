@@ -43,6 +43,6 @@ unit:
         POSTGRES_USER: postgres
         POSTGRES_PASSWORD: postgres
   variables:
-    DB_HOST: "postgre"
+    DB_HOST: "postgres"
   script:
       - python3.10 makefile.py --action=test
