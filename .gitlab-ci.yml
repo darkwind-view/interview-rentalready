@@ -1,6 +1,6 @@
 variables:
   REPOSITORY_OF_PIPELINE_IMAGES: darkwind8/temp
-  CI_BUILDER_IMAGE: ci-v1
+  CI_BUILDER_IMAGE: interview-rentalready-ci-v1
 
 stages:
   - build_and_push
