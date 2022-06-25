@@ -43,6 +43,8 @@ unit:
         POSTGRES_HOST_AUTH_METHOD: trust
         POSTGRES_USER: postgres
         POSTGRES_PASSWORD: postgres
+  variables:
+    DB_HOST: postgres
   script:
       - mkdir ~/.docker; echo "$dockerconfig_darkwind8" > ~/.docker/config.json
       - docker run $REPOSITORY_OF_PIPELINE_IMAGES:$APP_IMAGE_TAG python3.10 makefile.py --action=test
