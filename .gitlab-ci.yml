@@ -15,6 +15,7 @@ build_ci_image:
     DOCKER_HOST: tcp://service-dind:2375
     DOCKER_TLS_CERTDIR: ""
   script:
+      - sleep 20
       - docker ps
       - mkdir ~/.docker; echo "$dockerconfig_darkwind8" > ~/.docker/config.json
       - docker build --tag $REPOSITORY_OF_PIPELINE_IMAGES:$CI_BUILDER_IMAGE ci
