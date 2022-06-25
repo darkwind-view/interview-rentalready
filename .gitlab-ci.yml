@@ -27,14 +27,13 @@ build_app_image:
       - docker push $REPOSITORY_OF_PIPELINE_IMAGES:$APP_IMAGE_TAG
 
 linting:
-  image: $REPOSITORY_OF_PIPELINE_IMAGES:$CI_BUILDER_IMAGE
+  image: $REPOSITORY_OF_PIPELINE_IMAGES:$APP_IMAGE_TAG
   stage: test
   script:
-      - mkdir ~/.docker; echo "$dockerconfig_darkwind8" > ~/.docker/config.json
-      - docker run $REPOSITORY_OF_PIPELINE_IMAGES:$APP_IMAGE_TAG python3.10 makefile.py --action=lint
+      - python3.10 makefile.py --action=lint
 
 unit:
-  image: $REPOSITORY_OF_PIPELINE_IMAGES:$CI_BUILDER_IMAGE
+  image: $REPOSITORY_OF_PIPELINE_IMAGES:$APP_IMAGE_TAG
   stage: test
   services:
     - name: postgres:13
@@ -43,7 +42,7 @@ unit:
         POSTGRES_HOST_AUTH_METHOD: trust
         POSTGRES_USER: postgres
         POSTGRES_PASSWORD: postgres
+  variables:
+    DB_HOST: "postgre"
   script:
-      - sleep 600
-      - mkdir ~/.docker; echo "$dockerconfig_darkwind8" > ~/.docker/config.json
-      - docker run -e DB_HOST="postgres" $REPOSITORY_OF_PIPELINE_IMAGES:$APP_IMAGE_TAG python3.10 makefile.py --action=test
+      - python3.10 makefile.py --action=test
