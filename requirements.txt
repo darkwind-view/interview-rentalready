@@ -2,3 +2,4 @@ djangorestframework
 pytest-django
 factory-boy
 psycopg2-binary
+black

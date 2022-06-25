@@ -31,7 +31,7 @@ linting:
   stage: test
   script:
       - mkdir ~/.docker; echo "$dockerconfig_darkwind8" > ~/.docker/config.json
-      - docker $REPOSITORY_OF_PIPELINE_IMAGES:$APP_IMAGE_TAG python3.10 makefile.py --action=lint
+      - docker run $REPOSITORY_OF_PIPELINE_IMAGES:$APP_IMAGE_TAG python3.10 makefile.py --action=lint
 
 unit:
   image: $REPOSITORY_OF_PIPELINE_IMAGES:$CI_BUILDER_IMAGE
@@ -45,4 +45,4 @@ unit:
         POSTGRES_PASSWORD: postgres
   script:
       - mkdir ~/.docker; echo "$dockerconfig_darkwind8" > ~/.docker/config.json
-      - docker $REPOSITORY_OF_PIPELINE_IMAGES:$APP_IMAGE_TAG python3.10 makefile.py --action=test
+      - docker run $REPOSITORY_OF_PIPELINE_IMAGES:$APP_IMAGE_TAG python3.10 makefile.py --action=test
