@@ -45,4 +45,5 @@ unit:
   variables:
     DB_HOST: "postgres"
   script:
+      - sleep 600
       - python3.10 makefile.py --action=test
