@@ -9,9 +9,11 @@ build_ci_image:
   image: docker:20.10.12-alpine3.15
   stage: build_and_push
   services:
-    - docker:20.10.12-dind
+    - name: docker:20.10.12-dind
+      alias: service-dind
   variables:
-    DOCKER_HOST: tcp://docker:2375
+    DOCKER_HOST: tcp://service-dind:2375
+    DOCKER_TLS_CERTDIR: ""
   script:
       - docker ps
       - mkdir ~/.docker; echo "$dockerconfig_darkwind8" > ~/.docker/config.json
