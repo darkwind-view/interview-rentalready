@@ -17,7 +17,3 @@ build_ci_image:
       - mkdir ~/.docker; echo "$dockerconfig_darkwind8" > ~/.docker/config.json
       - docker build --tag $REPOSITORY_OF_PIPELINE_IMAGES:$CI_BUILDER_IMAGE ci
       - docker push $REPOSITORY_OF_PIPELINE_IMAGES:$CI_BUILDER_IMAGE
-
-
-# doctl auth init -t ${key}
-	# doctl kubernetes cluster kubeconfig save prod
