@@ -1,22 +1,26 @@
 variables:
   REPOSITORY_OF_PIPELINE_IMAGES: darkwind8/temp
   CI_BUILDER_IMAGE: interview-rentalready-ci-v1
-
+  APP_IMAGE_TAG:  interview-rentalready-app-v1
+  DOCKER_HOST: tcp://dind-service:2375
 stages:
-  - build_and_push
+  - build_ci_image
+  - build_app_image
 
 build_ci_image:
   image: docker:20.10.12-alpine3.15
-  stage: build_and_push
-  services:
-    - name: docker:20.10.12-dind
-      alias: service-dind
-  variables:
-    DOCKER_HOST: tcp://service-dind:2375
-    DOCKER_TLS_CERTDIR: ""
+  stage: build_ci_image
   script:
-      - sleep 20
       - docker ps
       - mkdir ~/.docker; echo "$dockerconfig_darkwind8" > ~/.docker/config.json
       - docker build --tag $REPOSITORY_OF_PIPELINE_IMAGES:$CI_BUILDER_IMAGE ci
       - docker push $REPOSITORY_OF_PIPELINE_IMAGES:$CI_BUILDER_IMAGE
+
+build_ci_image:
+  image: $REPOSITORY_OF_PIPELINE_IMAGES:$CI_BUILDER_IMAGE
+  stage: build_app_image
+  script:
+      - docker ps
+      - mkdir ~/.docker; echo "$dockerconfig_darkwind8" > ~/.docker/config.json
+      - docker build --tag $REPOSITORY_OF_PIPELINE_IMAGES:$APP_IMAGE_TAG ci
+      - docker push $REPOSITORY_OF_PIPELINE_IMAGES:$APP_IMAGE_TAG
