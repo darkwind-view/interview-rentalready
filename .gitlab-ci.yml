@@ -1,11 +1,17 @@
 variables:
-  PIPELINE_RUNNER: darkwind8/pipeline_images:v1.0-docker-20.10.12-kubectl-v1.24.2-helm-v3.9.0
+  REPOSITORY_OF_PIPELINE_IMAGES: darkwind8/temp
+  CI_BUILDER_IMAGE: ci-v1
 
 stages:
-  - testing
+  - build_and_push
 
-testing:
-  image: ${PIPELINE_RUNNER}
-  stage: testing
+build_ci_image:
+  image: docker:20.10.12-alpine3.15
+  stage: build_and_push
+  variables:
+    DOCKER_HOST: tcp://dind-service:2375
   script:
-    - echo 12345678
+      - docker ps
+      - mkdir ~/.docker; echo "$dockerconfig_darkwind8" > ~/.docker/config.json
+      - docker build --tag $REPOSITORY_OF_PIPELINE_IMAGES:$CI_BUILDER_IMAGE ci
+      - docker push $REPOSITORY_OF_PIPELINE_IMAGES:$CI_BUILDER_IMAGE
