@@ -8,10 +8,16 @@ stages:
 build_ci_image:
   image: docker:20.10.12-alpine3.15
   stage: build_and_push
+  services:
+    - docker:20.10.12-dind
   variables:
-    DOCKER_HOST: tcp://dind-service:2375
+    DOCKER_HOST: tcp://docker:2375
   script:
       - docker ps
       - mkdir ~/.docker; echo "$dockerconfig_darkwind8" > ~/.docker/config.json
       - docker build --tag $REPOSITORY_OF_PIPELINE_IMAGES:$CI_BUILDER_IMAGE ci
       - docker push $REPOSITORY_OF_PIPELINE_IMAGES:$CI_BUILDER_IMAGE
+
+
+# doctl auth init -t ${key}
+	# doctl kubernetes cluster kubeconfig save prod
