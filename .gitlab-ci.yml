@@ -1,0 +1,11 @@
+variables:
+  PIPELINE_RUNNER: darkwind8/pipeline_images:v1.0-docker-20.10.12-kubectl-v1.24.2-helm-v3.9.0
+
+stages:
+  - testing
+
+testing:
+  image: ${PIPELINE_RUNNER}
+  stage: testing
+  script:
+    - echo 12345678
