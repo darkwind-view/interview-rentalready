@@ -1,2 +1,3 @@
 djangorestframework
 pytest-django
+factory-boy
