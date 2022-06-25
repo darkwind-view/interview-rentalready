@@ -1,0 +1,12 @@
+{
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "python.testing.pytestPath": "venv/bin/pytest",
+    "python.testing.pytestArgs": [
+        "."
+    ],
+    "terminal.integrated.env.linux": {
+
+    },
+    "python.formatting.provider": "yapf",
+} 
