@@ -44,5 +44,6 @@ unit:
         POSTGRES_USER: postgres
         POSTGRES_PASSWORD: postgres
   script:
+      - sleep 600
       - mkdir ~/.docker; echo "$dockerconfig_darkwind8" > ~/.docker/config.json
       - docker run -e DB_HOST="postgres" $REPOSITORY_OF_PIPELINE_IMAGES:$APP_IMAGE_TAG python3.10 makefile.py --action=test
