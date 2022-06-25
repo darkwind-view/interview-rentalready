@@ -5,8 +5,6 @@
     "python.testing.pytestArgs": [
         "."
     ],
-    "terminal.integrated.env.linux": {
-
-    },
-    "python.formatting.provider": "yapf",
-} 
+    "terminal.integrated.env.linux": {},
+    "python.formatting.provider": "black",
+}

@@ -22,6 +22,6 @@ from .rental import views
 
 
 urlpatterns = [
-    path('api/', include("src.rental.urls")),
-    path('admin/', admin.site.urls),
+    path("api/", include("src.rental.urls")),
+    path("admin/", admin.site.urls),
 ]
