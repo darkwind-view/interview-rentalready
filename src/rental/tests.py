@@ -5,19 +5,35 @@ from rest_framework.reverse import reverse
 from rest_framework.test import APIClient
 import datetime
 from .views import queryset_of_reservations_with_previous_records
+from types import SimpleNamespace
 
 
 @pytest.fixture
 def example_data():
-    rental_1 = RentalTestFactory(name="Rental-1")
-    rental_2 = RentalTestFactory(name="Rental-2")
+    ns = SimpleNamespace(rentals=[], reservations=[])
+    ns.rentals = [
+        RentalTestFactory(name="Rental-1"),
+        RentalTestFactory(name="Rental-2"),
+    ]
 
-    ReservationTestFactory(rental=rental_1, checkin="2022-01-01", checkout="2022-01-13")
-    ReservationTestFactory(rental=rental_1, checkin="2022-01-20", checkout="2022-02-10")
-    ReservationTestFactory(rental=rental_1, checkin="2022-02-20", checkout="2022-03-10")
-
-    ReservationTestFactory(rental=rental_2, checkin="2022-01-02", checkout="2022-01-20")
-    ReservationTestFactory(rental=rental_2, checkin="2022-01-20", checkout="2022-02-11")
+    ns.reservations = [
+        ReservationTestFactory(
+            rental=ns.rentals[0], checkin="2022-01-01", checkout="2022-01-13"
+        ),
+        ReservationTestFactory(
+            rental=ns.rentals[0], checkin="2022-01-20", checkout="2022-02-10"
+        ),
+        ReservationTestFactory(
+            rental=ns.rentals[0], checkin="2022-02-20", checkout="2022-03-10"
+        ),
+        ReservationTestFactory(
+            rental=ns.rentals[1], checkin="2022-01-02", checkout="2022-01-20"
+        ),
+        ReservationTestFactory(
+            rental=ns.rentals[1], checkin="2022-01-20", checkout="2022-02-11"
+        ),
+    ]
+    return ns
 
 
 @pytest.mark.django_db
@@ -61,39 +77,41 @@ def test_get_reservations_with_previous_reservations_from_endpoint(
 
         print(result)
 
+        reservations = example_data.reservations
+        rentals = example_data.rentals
         assert len(result) == 5
         assert {
-            "checkin": "2022-01-01",
-            "checkout": "2022-01-13",
-            "id": 1,
+            "checkin": reservations[0].checkin,
+            "checkout": reservations[0].checkout,
+            "id": reservations[0].id,
             "previous_reservation_id": None,
-            "rental_name": "Rental-1",
+            "rental_name": rentals[0].name,
         } in result
         assert {
-            "checkin": "2022-01-20",
-            "checkout": "2022-02-10",
-            "id": 2,
-            "previous_reservation_id": 1,
-            "rental_name": "Rental-1",
+            "checkin": reservations[1].checkin,
+            "checkout": reservations[1].checkout,
+            "id": reservations[1].id,
+            "previous_reservation_id": reservations[0].id,
+            "rental_name": rentals[0].name,
         } in result
         assert {
-            "checkin": "2022-02-20",
-            "checkout": "2022-03-10",
-            "id": 3,
-            "previous_reservation_id": 2,
-            "rental_name": "Rental-1",
+            "checkin": reservations[2].checkin,
+            "checkout": reservations[2].checkout,
+            "id": reservations[2].id,
+            "previous_reservation_id": reservations[1].id,
+            "rental_name": rentals[0].name,
         } in result
         assert {
-            "checkin": "2022-01-02",
-            "checkout": "2022-01-20",
-            "id": 4,
+            "checkin": reservations[3].checkin,
+            "checkout": reservations[3].checkout,
+            "id": reservations[3].id,
             "previous_reservation_id": None,
-            "rental_name": "Rental-2",
+            "rental_name": rentals[1].name,
         } in result
         assert {
-            "checkin": "2022-01-20",
-            "checkout": "2022-02-11",
-            "id": 5,
-            "previous_reservation_id": 4,
-            "rental_name": "Rental-2",
+            "checkin": reservations[4].checkin,
+            "checkout": reservations[4].checkout,
+            "id": reservations[4].id,
+            "previous_reservation_id": reservations[3].id,
+            "rental_name": rentals[1].name,
         } in result
