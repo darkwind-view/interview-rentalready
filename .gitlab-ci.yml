@@ -6,6 +6,7 @@ variables:
 stages:
   - build_ci_image
   - build_app_image
+  - test
 
 build_ci_image:
   image: docker:20.10.12-alpine3.15
@@ -24,3 +25,24 @@ build_app_image:
       - mkdir ~/.docker; echo "$dockerconfig_darkwind8" > ~/.docker/config.json
       - docker build --tag $REPOSITORY_OF_PIPELINE_IMAGES:$APP_IMAGE_TAG ci
       - docker push $REPOSITORY_OF_PIPELINE_IMAGES:$APP_IMAGE_TAG
+
+linting:
+  image: $REPOSITORY_OF_PIPELINE_IMAGES:$CI_BUILDER_IMAGE
+  stage: test
+  script:
+      - mkdir ~/.docker; echo "$dockerconfig_darkwind8" > ~/.docker/config.json
+      - docker $REPOSITORY_OF_PIPELINE_IMAGES:$APP_IMAGE_TAG python3.10 makefile.py --action=lint
+
+unit:
+  image: $REPOSITORY_OF_PIPELINE_IMAGES:$CI_BUILDER_IMAGE
+  stage: test
+  services:
+    - name: postgres:13
+      alias: postgres
+      variables:
+        POSTGRES_HOST_AUTH_METHOD: trust
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+  script:
+      - mkdir ~/.docker; echo "$dockerconfig_darkwind8" > ~/.docker/config.json
+      - docker $REPOSITORY_OF_PIPELINE_IMAGES:$APP_IMAGE_TAG python3.10 makefile.py --action=test
