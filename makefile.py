@@ -8,7 +8,7 @@ def run_and_raise_errors(command):
         raise Exception("Non Zero Status Code exit")
 
 
-parser = argparse.ArgumentParser(description="Process some integers.")
+parser = argparse.ArgumentParser()
 parser.add_argument("--action", type=str)
 args = parser.parse_args()
 
