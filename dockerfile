@@ -11,7 +11,6 @@ COPY ./requirements.txt ./constraints.txt ./
 RUN pip install -r requirements.txt -c constraints.txt
 RUN pip install gunicorn
 
-# Create directories app_home and static directories
 WORKDIR /code
 
 COPY manage.py pytest.ini makefile.py ./
