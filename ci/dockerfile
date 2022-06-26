@@ -27,4 +27,6 @@ RUN pip3 install --upgrade pip setuptools
 RUN apk add --update openssl && \
     rm -rf /var/cache/apk/*
 
+RUN apk add docker-compose
+
 WORKDIR /app

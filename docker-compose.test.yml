@@ -1,0 +1,13 @@
+services:
+  db:
+    extends:
+      file: docker-compose.yml
+      service: db
+  test:
+    image: darkwind8/temp:interview-rentalready-app-v1
+    pull_policy: always
+    command: python3.10 makefile.py --action=test
+    environment:
+      DB_HOST: db
+    depends_on:
+      - db
